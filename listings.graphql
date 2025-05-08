@@ -1,0 +1,14 @@
+extend schema
+  @link(url: "https://specs.apollo.dev/federation/v2.10", import: ["@key"])
+
+"A particular intergalactic location available for booking"
+type Listing {
+  id: ID!
+  "The listing's title"
+  title: String!
+}
+
+type Query {
+  "A currated array of listings to feature on the homepage"
+  featuredListings: [Listing!]
+}
