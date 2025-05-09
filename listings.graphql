@@ -1,14 +1,36 @@
 extend schema
   @link(url: "https://specs.apollo.dev/federation/v2.10", import: ["@key"])
+  @link(
+    url: "https://specs.apollo.dev/connect/v0.1"
+    import: ["@source", "@connect"]
+  )
+  @source(
+    name: "listings"
+    http: { baseURL: "https://airlock-listings.demo-api.apollo.dev" }
+  )
+
+type Query {
+  "A currated array of listings to feature on the homepage"
+  featuredListings: [Listing!]!
+    @connect(
+      source: "listings"
+      http: { GET: "/featured-listings" }
+      selection: """
+      id
+      title
+      numOfBeds
+      costPerNight
+      closedForBooking: closedForBookings
+      """
+    )
+}
 
 "A particular intergalactic location available for booking"
 type Listing {
   id: ID!
   "The listing's title"
   title: String!
-}
-
-type Query {
-  "A currated array of listings to feature on the homepage"
-  featuredListings: [Listing!]
+  numOfBeds: Int
+  costPerNight: Float
+  closedForBooking: Boolean
 }
